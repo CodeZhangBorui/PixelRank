@@ -1,0 +1,9 @@
+ranks:
+  mining_rank: true
+  placing_rank: true
+  online_time_rank: true
+  switch_interval: 15
+
+storage:
+  database: "database.db"
+  save_interval: 60
