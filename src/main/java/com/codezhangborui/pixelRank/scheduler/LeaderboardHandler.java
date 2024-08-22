@@ -60,21 +60,13 @@ public class LeaderboardHandler {
 
     private static void updateScores(Objective objective, HashMap<String, Long> rankData) {
         Pattern ignorePattern = Pattern.compile(Configuration.getString("ranks.ignore_username_regex"));
-        rankData.entrySet().stream().sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-        int currentSize = 0;
-        for (String player : rankData.keySet()) {
-            if (ignorePattern.matcher(player).matches()) {
-                continue;
-            }
-            Score score = objective.getScore(player);
-            if(rankData.get(player).intValue() == 0) {
-                break;
-            }
-            score.setScore(rankData.get(player).intValue());
-            currentSize++;
-            if (currentSize >= Configuration.getInt("leaderboards.max_leaderboard_size")) {
-                break;
-            }
-        }
+        rankData.entrySet().stream()
+            .filter(entry -> !ignorePattern.matcher(entry.getKey()).matches())
+            .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+            .limit(Configuration.getInt("leaderboards.max_leaderboard_size"))
+            .forEach(entry -> {
+                Score score = objective.getScore(entry.getKey());
+                score.setScore(entry.getValue().intValue());
+            });
     }
 }
