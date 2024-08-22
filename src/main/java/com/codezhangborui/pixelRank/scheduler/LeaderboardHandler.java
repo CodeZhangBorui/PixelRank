@@ -11,7 +11,7 @@ public class LeaderboardHandler {
     public static int currentLeaderboard = 0;
 
     public static void switchLeaderboard() {
-        currentLeaderboard = (currentLeaderboard + 1) % 3;
+        currentLeaderboard = (currentLeaderboard + 1) % 4;
         if(!Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
             switchLeaderboard();
         } else if(!Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
