@@ -62,6 +62,9 @@ public class LeaderboardHandler {
         int currentSize = 0;
         for (String player : rankData.keySet()) {
             Score score = objective.getScore(player);
+            if(rankData.get(player).intValue() == 0) {
+                break;
+            }
             score.setScore(rankData.get(player).intValue());
             currentSize++;
             if (currentSize >= Configuration.getInt("leaderboards.max_leaderboard_size")) {
