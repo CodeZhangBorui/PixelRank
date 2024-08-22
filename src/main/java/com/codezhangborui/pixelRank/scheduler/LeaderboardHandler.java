@@ -58,6 +58,7 @@ public class LeaderboardHandler {
     }
 
     private static void updateScores(Objective objective, HashMap<String, Long> rankData) {
+        rankData.entrySet().stream().sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         int currentSize = 0;
         for (String player : rankData.keySet()) {
             Score score = objective.getScore(player);
