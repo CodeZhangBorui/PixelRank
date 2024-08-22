@@ -4,6 +4,7 @@ ranks:
   online_time_rank: true
   death_rank: false
   switch_interval: 15
+  ignore_username_regex: "Input_a_regex_here_to_ignore_specific_usernames"
 
 storage:
   database: "database.db"

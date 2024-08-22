@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class LeaderboardHandler {
     public static int currentLeaderboard = 0;
@@ -58,9 +59,13 @@ public class LeaderboardHandler {
     }
 
     private static void updateScores(Objective objective, HashMap<String, Long> rankData) {
+        Pattern ignorePattern = Pattern.compile(Configuration.getString("ranks.ignore_username_regex"));
         rankData.entrySet().stream().sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
         int currentSize = 0;
         for (String player : rankData.keySet()) {
+            if (ignorePattern.matcher(player).matches()) {
+                continue;
+            }
             Score score = objective.getScore(player);
             if(rankData.get(player).intValue() == 0) {
                 break;
