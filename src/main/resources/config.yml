@@ -2,6 +2,7 @@ ranks:
   mining_rank: true
   placing_rank: true
   online_time_rank: true
+  death_rank: false
   switch_interval: 15
 
 storage:

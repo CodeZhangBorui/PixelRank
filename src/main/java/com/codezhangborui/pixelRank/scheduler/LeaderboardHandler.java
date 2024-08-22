@@ -1,5 +1,6 @@
 package com.codezhangborui.pixelRank.scheduler;
 
+import com.codezhangborui.pixelRank.Configuration;
 import com.codezhangborui.pixelRank.database.Database;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
@@ -11,7 +12,17 @@ public class LeaderboardHandler {
 
     public static void switchLeaderboard() {
         currentLeaderboard = (currentLeaderboard + 1) % 3;
-        updateScoreboard();
+        if(Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
+            switchLeaderboard();
+        } else if(Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
+            switchLeaderboard();
+        } else if(Configuration.getBoolean("ranks.online_time_rank") && currentLeaderboard == 2) {
+            switchLeaderboard();
+        } else if(Configuration.getBoolean("ranks.death_rank") && currentLeaderboard == 3) {
+            switchLeaderboard();
+        } else {
+            updateScoreboard();
+        }
     }
 
     public static void updateScoreboard() {
@@ -36,6 +47,10 @@ public class LeaderboardHandler {
             case 2:
                 objective.setDisplayName("§f§m-§7§m-§8§m[-§r Online Time Rank §8§m-]§7§m-§f§m-");
                 updateScores(objective, Database.online_time_rank);
+                break;
+            case 3:
+                objective.setDisplayName("§f§m-§7§m-§8§m[-§r Death Rank §8§m-]§7§m-§f§m-");
+                updateScores(objective, Database.death_rank);
                 break;
         }
 

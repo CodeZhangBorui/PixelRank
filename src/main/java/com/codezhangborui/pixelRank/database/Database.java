@@ -14,6 +14,7 @@ public class Database {
     public static HashMap<String, Long> mining_rank = new HashMap<>();
     public static HashMap<String, Long> placing_rank = new HashMap<>();
     public static HashMap<String, Long> online_time_rank = new HashMap<>();
+    public static HashMap<String, Long> death_rank = new HashMap<>();
     private static Connection connection;
     private static String DATABASE_URL;
     private static JavaPlugin plugin;
@@ -33,6 +34,7 @@ public class Database {
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS mining_rank (player TEXT PRIMARY KEY, value INTEGER)");
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS placing_rank (player TEXT PRIMARY KEY, value INTEGER)");
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS online_time_rank (player TEXT PRIMARY KEY, value INTEGER)");
+                connection.createStatement().execute("CREATE TABLE IF NOT EXISTS death_rank (player TEXT PRIMARY KEY, value INTEGER)");
                 // Load data from the database
                 var miningRankResultSet = connection.createStatement().executeQuery("SELECT * FROM mining_rank");
                 while (miningRankResultSet.next()) {
@@ -45,6 +47,10 @@ public class Database {
                 var onlineTimeRankResultSet = connection.createStatement().executeQuery("SELECT * FROM online_time_rank");
                 while (onlineTimeRankResultSet.next()) {
                     online_time_rank.put(onlineTimeRankResultSet.getString("player"), onlineTimeRankResultSet.getLong("value"));
+                }
+                var deathRankResultSet = connection.createStatement().executeQuery("SELECT * FROM death_rank");
+                while (deathRankResultSet.next()) {
+                    death_rank.put(deathRankResultSet.getString("player"), deathRankResultSet.getLong("value"));
                 }
                 // Close the connection
                 connection.close();
@@ -72,6 +78,10 @@ public class Database {
                 connection.createStatement().execute("DELETE FROM online_time_rank");
                 for (var entry : online_time_rank.entrySet()) {
                     connection.createStatement().execute("INSERT INTO online_time_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+                }
+                connection.createStatement().execute("DELETE FROM death_rank");
+                for (var entry : death_rank.entrySet()) {
+                    connection.createStatement().execute("INSERT INTO death_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
                 }
                 // Close the connection
                 connection.close();

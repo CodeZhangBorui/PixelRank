@@ -15,6 +15,7 @@ public final class PixelRank extends JavaPlugin {
         Configuration.setDefault("ranks.mining_rank", true);
         Configuration.setDefault("ranks.placing_rank", true);
         Configuration.setDefault("ranks.online_time_rank", true);
+        Configuration.setDefault("ranks.death_rank", false);
         Configuration.setDefault("ranks.switch_interval", 15);
         Configuration.setDefault("storage.database", "database.db");
         Configuration.setDefault("storage.save_interval", 60);
