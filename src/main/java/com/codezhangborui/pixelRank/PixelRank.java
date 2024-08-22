@@ -19,6 +19,11 @@ public final class PixelRank extends JavaPlugin {
         Configuration.setDefault("ranks.switch_interval", 15);
         Configuration.setDefault("storage.database", "database.db");
         Configuration.setDefault("storage.save_interval", 60);
+        Configuration.setDefault("leaderboards.mining_rank", "Mining");
+        Configuration.setDefault("leaderboards.placing_rank", "Placement");
+        Configuration.setDefault("leaderboards.online_time_rank", "Online Time");
+        Configuration.setDefault("leaderboards.death_rank", "Death");
+        Configuration.setDefault("leaderboards.max_leaderboard_size", 10);
     }
 
     @Override

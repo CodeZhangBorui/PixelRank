@@ -8,3 +8,10 @@ ranks:
 storage:
   database: "database.db"
   save_interval: 60
+
+leaderboards:
+  mining_rank: "Mining"
+  placing_rank: "Placement"
+  online_time_rank: "Online Time"
+  death_rank: "Death"
+  max_leaderboard_size: 10

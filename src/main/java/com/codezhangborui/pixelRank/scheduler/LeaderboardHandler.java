@@ -12,13 +12,13 @@ public class LeaderboardHandler {
 
     public static void switchLeaderboard() {
         currentLeaderboard = (currentLeaderboard + 1) % 3;
-        if(Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
+        if(!Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
             switchLeaderboard();
-        } else if(Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
+        } else if(!Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
             switchLeaderboard();
-        } else if(Configuration.getBoolean("ranks.online_time_rank") && currentLeaderboard == 2) {
+        } else if(!Configuration.getBoolean("ranks.online_time_rank") && currentLeaderboard == 2) {
             switchLeaderboard();
-        } else if(Configuration.getBoolean("ranks.death_rank") && currentLeaderboard == 3) {
+        } else if(!Configuration.getBoolean("ranks.death_rank") && currentLeaderboard == 3) {
             switchLeaderboard();
         } else {
             updateScoreboard();
@@ -37,19 +37,19 @@ public class LeaderboardHandler {
 
         switch (currentLeaderboard) {
             case 0:
-                objective.setDisplayName("§f§m-§7§m-§8§m[-§r Mining Rank §8§m-]§7§m-§f§m-");
+                objective.setDisplayName(Configuration.getString("leaderboards.mining_rank"));
                 updateScores(objective, Database.mining_rank);
                 break;
             case 1:
-                objective.setDisplayName("§f§m-§7§m-§8§m[-§r Placing Rank §8§m-]§7§m-§f§m-");
+                objective.setDisplayName(Configuration.getString("leaderboards.placing_rank"));
                 updateScores(objective, Database.placing_rank);
                 break;
             case 2:
-                objective.setDisplayName("§f§m-§7§m-§8§m[-§r Online Time Rank §8§m-]§7§m-§f§m-");
+                objective.setDisplayName(Configuration.getString("leaderboards.online_time_rank"));
                 updateScores(objective, Database.online_time_rank);
                 break;
             case 3:
-                objective.setDisplayName("§f§m-§7§m-§8§m[-§r Death Rank §8§m-]§7§m-§f§m-");
+                objective.setDisplayName(Configuration.getString("leaderboards.death_rank"));
                 updateScores(objective, Database.death_rank);
                 break;
         }
@@ -63,7 +63,7 @@ public class LeaderboardHandler {
             Score score = objective.getScore(player);
             score.setScore(rankData.get(player).intValue());
             currentSize++;
-            if (currentSize >= 15) {
+            if (currentSize >= Configuration.getInt("leaderboards.max_leaderboard_size")) {
                 break;
             }
         }
