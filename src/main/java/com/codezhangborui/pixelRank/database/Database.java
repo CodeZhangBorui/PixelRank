@@ -63,33 +63,34 @@ public class Database {
     }
 
     public static boolean save() {
-        try {
-            connection = DriverManager.getConnection(DATABASE_URL);
-            if (connection != null) {
-                // Save data to the database
-                connection.createStatement().execute("DELETE FROM mining_rank");
-                for (var entry : mining_rank.entrySet()) {
-                    connection.createStatement().execute("INSERT INTO mining_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+        new Thread(() -> {
+            try {
+                connection = DriverManager.getConnection(DATABASE_URL);
+                if (connection != null) {
+                    // Save data to the database
+                    connection.createStatement().execute("DELETE FROM mining_rank");
+                    for (var entry : mining_rank.entrySet()) {
+                        connection.createStatement().execute("INSERT INTO mining_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+                    }
+                    connection.createStatement().execute("DELETE FROM placing_rank");
+                    for (var entry : placing_rank.entrySet()) {
+                        connection.createStatement().execute("INSERT INTO placing_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+                    }
+                    connection.createStatement().execute("DELETE FROM online_time_rank");
+                    for (var entry : online_time_rank.entrySet()) {
+                        connection.createStatement().execute("INSERT INTO online_time_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+                    }
+                    connection.createStatement().execute("DELETE FROM death_rank");
+                    for (var entry : death_rank.entrySet()) {
+                        connection.createStatement().execute("INSERT INTO death_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
+                    }
+                    // Close the connection
+                    connection.close();
                 }
-                connection.createStatement().execute("DELETE FROM placing_rank");
-                for (var entry : placing_rank.entrySet()) {
-                    connection.createStatement().execute("INSERT INTO placing_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
-                }
-                connection.createStatement().execute("DELETE FROM online_time_rank");
-                for (var entry : online_time_rank.entrySet()) {
-                    connection.createStatement().execute("INSERT INTO online_time_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
-                }
-                connection.createStatement().execute("DELETE FROM death_rank");
-                for (var entry : death_rank.entrySet()) {
-                    connection.createStatement().execute("INSERT INTO death_rank (player, value) VALUES ('" + entry.getKey() + "', " + entry.getValue() + ")");
-                }
-                // Close the connection
-                connection.close();
-                return true;
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Could not connect to the SQLite database!", e);
             }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Could not connect to the SQLite database!", e);
-        }
-        return false;
+        }).start();
+        return true;
     }
 }
