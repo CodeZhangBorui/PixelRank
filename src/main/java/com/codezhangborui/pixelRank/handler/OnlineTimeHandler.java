@@ -1,4 +1,4 @@
-package com.codezhangborui.pixelRank.scheduler;
+package com.codezhangborui.pixelRank.handler;
 
 import com.codezhangborui.pixelRank.database.Database;
 

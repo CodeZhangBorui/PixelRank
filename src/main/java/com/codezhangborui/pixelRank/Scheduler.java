@@ -1,7 +1,8 @@
-package com.codezhangborui.pixelRank.scheduler;
+package com.codezhangborui.pixelRank;
 
-import com.codezhangborui.pixelRank.Configuration;
 import com.codezhangborui.pixelRank.database.Database;
+import com.codezhangborui.pixelRank.handler.LeaderboardHandler;
+import com.codezhangborui.pixelRank.handler.OnlineTimeHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

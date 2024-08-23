@@ -1,4 +1,4 @@
-package com.codezhangborui.pixelRank;
+package com.codezhangborui.pixelRank.handler;
 
 import com.codezhangborui.pixelRank.database.Database;
 import org.bukkit.event.EventHandler;

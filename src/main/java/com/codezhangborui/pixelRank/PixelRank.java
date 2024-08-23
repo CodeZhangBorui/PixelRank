@@ -1,8 +1,8 @@
 package com.codezhangborui.pixelRank;
 
 import com.codezhangborui.pixelRank.database.Database;
+import com.codezhangborui.pixelRank.handler.EventListener;
 import com.codezhangborui.pixelRank.handler.LeaderboardHandler;
-import com.codezhangborui.pixelRank.handler.Scheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
