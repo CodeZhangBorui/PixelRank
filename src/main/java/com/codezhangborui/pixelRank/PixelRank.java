@@ -1,8 +1,8 @@
 package com.codezhangborui.pixelRank;
 
 import com.codezhangborui.pixelRank.database.Database;
-import com.codezhangborui.pixelRank.scheduler.LeaderboardHandler;
-import com.codezhangborui.pixelRank.scheduler.Scheduler;
+import com.codezhangborui.pixelRank.handler.LeaderboardHandler;
+import com.codezhangborui.pixelRank.handler.Scheduler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -43,7 +43,9 @@ public final class PixelRank extends JavaPlugin {
         LeaderboardHandler.updateScoreboard();
         logger.info("\033[32mRegistrying events and commands...\033[0m");
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
-        this.getCommand("pixelrank").setExecutor(new PixelRankCommand(this));
+        PixelRankCommand commandExecutor = new PixelRankCommand(this);
+        this.getCommand("pixelrank").setExecutor(commandExecutor);
+        this.getCommand("pixelrank").setTabCompleter(commandExecutor);
         logger.info("\033[32mRegistrying time scheduler...\033[0m");
         Scheduler.start(this);
         logger.info("\033[92mPixelRank has been enabled!\033[0m");

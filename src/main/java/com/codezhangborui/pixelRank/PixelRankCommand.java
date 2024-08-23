@@ -1,12 +1,13 @@
 package com.codezhangborui.pixelRank;
 
 import com.codezhangborui.pixelRank.database.Database;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PixelRankCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PixelRankCommand implements CommandExecutor, TabCompleter {
 
     private final JavaPlugin plugin;
 
@@ -17,20 +18,39 @@ public class PixelRankCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("Usage: /pixelrank reload");
+            sender.sendMessage("§bThe server is running PixelRank version " + plugin.getDescription().getVersion());
+            if(sender.isOp() || sender.hasPermission("pixelrank.admin") || sender instanceof ConsoleCommandSender) {
+                sender.sendMessage("Use §b/pixelrank help§r for more information.");
+            } else {
+                sender.sendMessage("§cYou do not have permission to use any sub command.");
+            }
+            return true;
+        } else if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+            if(sender.isOp() || sender.hasPermission("pixelrank.admin") || sender instanceof ConsoleCommandSender) {
+                Configuration.reload();
+                if(!Database.save()) {
+                    plugin.getLogger().severe("Failed to save data to the database!");
+                }
+                sender.sendMessage("§aPixelRank reloaded.");
+                return true;
+            } else {
+                sender.sendMessage("§cYou do not have permission to use this command.");
+                return true;
+            }
+        } else {
+            sender.sendMessage("§cUnknown command.§r Use §b/pixelrank help§r for more information.");
             return false;
         }
+    }
 
-        if (args[0].equalsIgnoreCase("reload")) {
-            Configuration.reload();
-            if(!Database.save()) {
-                plugin.getLogger().severe("Failed to save data to the database!");
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        List<String> suggestions = new ArrayList<>();
+        if (args.length == 1) {
+            if(sender.isOp() || sender.hasPermission("pixelrank.admin") || sender instanceof ConsoleCommandSender) {
+                suggestions.add("reload");
             }
-            sender.sendMessage("PixelRank configuration reloaded.");
-            return true;
         }
-
-        sender.sendMessage("Unknown command. Usage: /pixelrank reload");
-        return false;
+        return suggestions;
     }
 }
