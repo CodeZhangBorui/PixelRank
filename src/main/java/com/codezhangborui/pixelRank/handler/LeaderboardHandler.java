@@ -13,13 +13,13 @@ public class LeaderboardHandler {
 
     public static void switchLeaderboard() {
         currentLeaderboard = (currentLeaderboard + 1) % 4;
-        if(!Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
+        if (!Configuration.getBoolean("ranks.mining_rank") && currentLeaderboard == 0) {
             switchLeaderboard();
-        } else if(!Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
+        } else if (!Configuration.getBoolean("ranks.placing_rank") && currentLeaderboard == 1) {
             switchLeaderboard();
-        } else if(!Configuration.getBoolean("ranks.online_time_rank") && currentLeaderboard == 2) {
+        } else if (!Configuration.getBoolean("ranks.online_time_rank") && currentLeaderboard == 2) {
             switchLeaderboard();
-        } else if(!Configuration.getBoolean("ranks.death_rank") && currentLeaderboard == 3) {
+        } else if (!Configuration.getBoolean("ranks.death_rank") && currentLeaderboard == 3) {
             switchLeaderboard();
         } else {
             updateScoreboard();
@@ -60,13 +60,9 @@ public class LeaderboardHandler {
 
     private static void updateScores(Objective objective, HashMap<String, Long> rankData) {
         Pattern ignorePattern = Pattern.compile(Configuration.getString("ranks.ignore_username_regex"));
-        rankData.entrySet().stream()
-            .filter(entry -> !ignorePattern.matcher(entry.getKey()).matches())
-            .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
-            .limit(Configuration.getInt("leaderboards.max_leaderboard_size"))
-            .forEach(entry -> {
-                Score score = objective.getScore(entry.getKey());
-                score.setScore(entry.getValue().intValue());
-            });
+        rankData.entrySet().stream().filter(entry -> !ignorePattern.matcher(entry.getKey()).matches()).sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())).limit(Configuration.getInt("leaderboards.max_leaderboard_size")).forEach(entry -> {
+            Score score = objective.getScore(entry.getKey());
+            score.setScore(entry.getValue().intValue());
+        });
     }
 }

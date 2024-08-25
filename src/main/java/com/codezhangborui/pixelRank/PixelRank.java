@@ -54,7 +54,7 @@ public final class PixelRank extends JavaPlugin {
     @Override
     public void onDisable() {
         logger.info("\033[32mSaving all data to the database...\033[0m");
-        if(!Database.save()) {
+        if (!Database.save()) {
             logger.severe("Failed to save data to the database!");
         }
         logger.info("\033[91mPixelRank has been disabled! Goodbye!\033[0m");
