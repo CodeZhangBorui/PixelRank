@@ -29,7 +29,8 @@ Fuel competition and encourage player engagement on your Minecraft server with P
 
 **Commands:**
 
-* `/pixelrank reload`: Reloads the plugin's configuration.
+* `/pixelrank rank`: Displays all ranks.
+* `/pixelrank reload`: (Permission: OP/`pixelrank.admin`) Reloads the plugin's configuration.
 
 **Bug Reports & Suggestions:**
 
