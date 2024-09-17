@@ -26,6 +26,7 @@ Fuel competition and encourage player engagement on your Minecraft server with P
 2. Place the jar file in your server's `plugins` folder.
 3. Start your server.
 4. Configure the plugin settings in the `config.yml` file that's generated.
+5. Read wiki [Here](https://github.com/CodeZhangBorui/PixelRank/wiki).
 
 **Commands:**
 
