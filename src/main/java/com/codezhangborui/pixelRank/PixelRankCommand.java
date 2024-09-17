@@ -1,9 +1,11 @@
 package com.codezhangborui.pixelRank;
 
 import com.codezhangborui.pixelRank.database.Database;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,16 +55,23 @@ public class PixelRankCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§bThe server is running PixelRank version " + plugin.getDescription().getVersion());
-            sender.sendMessage("Use §b/pixelrank help§r for more information.");
+            sender.sendMessage(Component.text("The server is running PixelRank version " + plugin.getDescription().getVersion(), NamedTextColor.AQUA));
+            sender.sendMessage(Component.text("Use ", NamedTextColor.WHITE)
+                    .append(Component.text("/pixelrank help", NamedTextColor.AQUA).clickEvent(ClickEvent.runCommand("/pixelrank help")))
+                    .append(Component.text(" for more information.", NamedTextColor.WHITE)));
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-            sender.sendMessage("§bPixelRank Help:");
-            sender.sendMessage("§b/pixelrank help§r - Show this help message.");
-            sender.sendMessage("§b/pixelrank rank <mine|place|time|death>§r - Show the specific rank.");
+            ComponentBuilder<TextComponent, TextComponent.Builder> message = Component.text();
+            message.append(Component.text("PixelRank Help:", NamedTextColor.AQUA)).append(Component.newline());
+            message.append(Component.text("/pixelrank help", NamedTextColor.WHITE).clickEvent(ClickEvent.runCommand("/pixelrank help"))
+                    .append(Component.text(" - Show this help message.", NamedTextColor.GRAY))).append(Component.newline());
+            message.append(Component.text("/pixelrank rank <mine|place|time|death>", NamedTextColor.WHITE).clickEvent(ClickEvent.runCommand("/pixelrank rank"))
+                    .append(Component.text(" - Show the specific rank.", NamedTextColor.GRAY))).append(Component.newline());
             if (sender.isOp() || sender.hasPermission("pixelrank.admin") || sender instanceof ConsoleCommandSender) {
-                sender.sendMessage("§b/pixelrank reload§r - Reload the configuration file.");
+                message.append(Component.text("/pixelrank reload", NamedTextColor.WHITE).clickEvent(ClickEvent.runCommand("/pixelrank reload"))
+                        .append(Component.text(" - Reload the configuration file.", NamedTextColor.GRAY)).append(Component.newline()));
             }
+            sender.sendMessage(message.build());
             return true;
         } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
             if (sender.isOp() || sender.hasPermission("pixelrank.admin") || sender instanceof ConsoleCommandSender) {
@@ -70,65 +79,76 @@ public class PixelRankCommand implements CommandExecutor, TabCompleter {
                 if (!Database.save()) {
                     plugin.getLogger().severe("Failed to save data to the database!");
                 }
-                sender.sendMessage("§aPixelRank reloaded.");
-                return true;
+                sender.sendMessage(Component.text("Configuration has been successfully reloaded.", NamedTextColor.GREEN));
             } else {
-                sender.sendMessage("§cYou do not have permission to use this command.");
-                return true;
+                sender.sendMessage(Component.text("You do not have permission to execute this command.", NamedTextColor.RED));
             }
+            return true;
         } else if (args[0].equalsIgnoreCase("rank")) {
             if (args.length == 1) {
-                sender.sendMessage("Please specify the rank type:");
+                sender.sendMessage(Component.text("Please specify the rank type:", NamedTextColor.AQUA));
                 if (sender instanceof ConsoleCommandSender) {
-                    sender.sendMessage("§b/pixelrank rank mine§r - Show the mining rank.");
-                    sender.sendMessage("§b/pixelrank rank place§r - Show the placing rank.");
-                    sender.sendMessage("§b/pixelrank rank time§r - Show the online time rank.");
-                    sender.sendMessage("§b/pixelrank rank death§r - Show the death rank.");
+                    if(Configuration.getBoolean("ranks.mining_rank")) {
+                        sender.sendMessage("\033[96m/pixelrank rank mine\033[0m - Show the mining rank.");
+                    }
+                    if(Configuration.getBoolean("ranks.placing_rank")) {
+                        sender.sendMessage("\033[96m/pixelrank rank place\033[0m - Show the placing rank.");
+                    }
+                    if(Configuration.getBoolean("ranks.online_time_rank")) {
+                        sender.sendMessage("\033[96m/pixelrank rank time\033[0m - Show the online time rank.");
+                    }
+                    if(Configuration.getBoolean("ranks.death_rank")) {
+                        sender.sendMessage("\033[96m/pixelrank rank death\033[0m - Show the death rank.");
+                    }
                 } else {
-                    TextComponent message = new TextComponent("");
-                    TextComponent button_mining = new TextComponent("[Mining] ");
-                    button_mining.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelrank rank mine"));
-                    button_mining.setColor(ChatColor.GOLD);
-                    message.addExtra(button_mining);
-                    TextComponent button_placing = new TextComponent("[Placing] ");
-                    button_placing.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelrank rank place"));
-                    button_placing.setColor(ChatColor.AQUA);
-                    message.addExtra(button_placing);
-                    TextComponent button_time = new TextComponent("[Online Time] ");
-                    button_time.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelrank rank time"));
-                    button_time.setColor(ChatColor.GREEN);
-                    message.addExtra(button_time);
-                    TextComponent button_death = new TextComponent("[Death] ");
-                    button_death.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pixelrank rank death"));
-                    button_death.setColor(ChatColor.RED);
-                    message.addExtra(button_death);
-                    sender.spigot().sendMessage(message);
+                    ComponentBuilder<TextComponent, TextComponent.Builder> message = Component.text();
+                    if(Configuration.getBoolean("ranks.mining_rank")) {
+                        message.append(Component.text("[Mining] ", NamedTextColor.GOLD).clickEvent(ClickEvent.runCommand("/pixelrank rank mine")));
+                    }
+                    if(Configuration.getBoolean("ranks.placing_rank")) {
+                        message.append(Component.text("[Placing] ", NamedTextColor.AQUA).clickEvent(ClickEvent.runCommand("/pixelrank rank place")));
+                    }
+                    if(Configuration.getBoolean("ranks.online_time_rank")) {
+                        message.append(Component.text("[Online Time] ", NamedTextColor.GREEN).clickEvent(ClickEvent.runCommand("/pixelrank rank time")));
+                    }
+                    if(Configuration.getBoolean("ranks.death_rank")) {
+                        message.append(Component.text("[Death] ", NamedTextColor.RED).clickEvent(ClickEvent.runCommand("/pixelrank rank death")));
+                    }
+                    sender.sendMessage(message.build());
                 }
                 return true;
             } else {
-                if (args[1].equalsIgnoreCase("mine")) {
-                    sender.sendMessage("§bMining Rank:");
+                if (args[1].equalsIgnoreCase("mine") && Configuration.getBoolean("ranks.mining_rank")) {
+                    sender.sendMessage(Component.text("Mining Rank:").color(NamedTextColor.AQUA));
                     sendRank(sender, Database.mining_rank);
                     return true;
-                } else if (args[1].equalsIgnoreCase("place")) {
-                    sender.sendMessage("§bPlacing Rank:");
+                } else if (args[1].equalsIgnoreCase("place") && Configuration.getBoolean("ranks.placing_rank")) {
+                    sender.sendMessage(Component.text("Placing Rank:").color(NamedTextColor.AQUA));
                     sendRank(sender, Database.placing_rank);
                     return true;
-                } else if (args[1].equalsIgnoreCase("time")) {
-                    sender.sendMessage("§bOnline Time Rank:");
+                } else if (args[1].equalsIgnoreCase("time") && Configuration.getBoolean("ranks.online_time_rank")) {
+                    sender.sendMessage(Component.text("Online Time Rank:").color(NamedTextColor.AQUA));
                     sendRank(sender, Database.online_time_rank);
                     return true;
-                } else if (args[1].equalsIgnoreCase("death")) {
-                    sender.sendMessage("§bDeath Rank:");
+                } else if (args[1].equalsIgnoreCase("death") && Configuration.getBoolean("ranks.death_rank")) {
+                    sender.sendMessage(Component.text("Death Rank:").color(NamedTextColor.AQUA));
                     sendRank(sender, Database.death_rank);
                     return true;
                 } else {
-                    sender.sendMessage("§cUnknown rank type.§r Use §b/pixelrank help§r for more information.");
+                    TextComponent message = Component.text("Unknown or disabled rank type.", NamedTextColor.RED)
+                            .append(Component.text(" Use ", NamedTextColor.WHITE))
+                            .append(Component.text("/pixelrank help", NamedTextColor.AQUA).clickEvent(ClickEvent.runCommand("/pixelrank help")))
+                            .append(Component.text(" for more information.", NamedTextColor.WHITE));
+                    sender.sendMessage(message);
                     return false;
                 }
             }
         } else {
-            sender.sendMessage("§cUnknown command.§r Use §b/pixelrank help§r for more information.");
+            TextComponent message = Component.text("Unknown command.", NamedTextColor.RED)
+                            .append(Component.text(" Use ", NamedTextColor.WHITE))
+                            .append(Component.text("/pixelrank help", NamedTextColor.AQUA).clickEvent(ClickEvent.runCommand("/pixelrank help")))
+                            .append(Component.text(" for more information.", NamedTextColor.WHITE));
+            sender.sendMessage(message);
             return false;
         }
     }
@@ -143,10 +163,18 @@ public class PixelRankCommand implements CommandExecutor, TabCompleter {
                 suggestions.add("reload");
             }
         } else if (args.length == 2 && args[0].equalsIgnoreCase("rank")) {
-            suggestions.add("mine");
-            suggestions.add("place");
-            suggestions.add("time");
-            suggestions.add("death");
+            if(Configuration.getBoolean("ranks.mining_rank")) {
+                suggestions.add("mine");
+            }
+            if(Configuration.getBoolean("ranks.placing_rank")) {
+                suggestions.add("place");
+            }
+            if(Configuration.getBoolean("ranks.online_time_rank")) {
+                suggestions.add("time");
+            }
+            if(Configuration.getBoolean("ranks.death_rank")) {
+                suggestions.add("death");
+            }
         }
         return suggestions;
     }
