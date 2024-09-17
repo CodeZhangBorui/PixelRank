@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,9 +42,12 @@ public class Configuration {
         }
     }
 
-    public static void setDefault(String path, Object value) {
+    public static void setDefault(String path, Object value, String... comment) {
         if (!config.contains(path)) {
             config.set(path, value);
+            if(comment.length > 0) {
+                config.setComments(path, Arrays.asList(comment));
+            }
             save();
         }
     }

@@ -12,19 +12,19 @@ public final class PixelRank extends JavaPlugin {
 
     private void loadConfig() {
         Configuration.init(this);
-        Configuration.setDefault("ranks.mining_rank", true);
-        Configuration.setDefault("ranks.placing_rank", true);
-        Configuration.setDefault("ranks.online_time_rank", true);
-        Configuration.setDefault("ranks.death_rank", false);
-        Configuration.setDefault("ranks.switch_interval", 15);
-        Configuration.setDefault("ranks.ignore_username_regex", "Input_a_regex_here_to_ignore_specific_usernames");
-        Configuration.setDefault("storage.database", "database.db");
-        Configuration.setDefault("storage.save_interval", 60);
-        Configuration.setDefault("leaderboards.mining_rank", "Mining");
-        Configuration.setDefault("leaderboards.placing_rank", "Placement");
-        Configuration.setDefault("leaderboards.online_time_rank", "Online Time");
-        Configuration.setDefault("leaderboards.death_rank", "Death");
-        Configuration.setDefault("leaderboards.max_leaderboard_size", 10);
+        Configuration.setDefault("ranks.mining_rank", true, "Whether to display the mining rank");
+        Configuration.setDefault("ranks.placing_rank", true, "Whether to display the placement rank");
+        Configuration.setDefault("ranks.online_time_rank", true, "Whether to display the online time rank");
+        Configuration.setDefault("ranks.death_rank", false, "Whether to display the death rank");
+        Configuration.setDefault("ranks.switch_interval", 15, "The interval of switching ranks on the scoreboard");
+        Configuration.setDefault("ranks.ignore_username_regex", "Input_a_regex_here_to_ignore_specific_usernames", "The regex to ignore specific usernames");
+        Configuration.setDefault("storage.database", "database.db", "The filename of local SQLite database file");
+        Configuration.setDefault("storage.save_interval", 60, "The interval of saving data to the database");
+        Configuration.setDefault("leaderboards.mining_rank", "Mining", "The title of the mining rank leaderboard");
+        Configuration.setDefault("leaderboards.placing_rank", "Placement", "The title of the placement rank leaderboard");
+        Configuration.setDefault("leaderboards.online_time_rank", "Online Time", "The title of the online time rank leaderboard");
+        Configuration.setDefault("leaderboards.death_rank", "Death", "The title of the death rank leaderboard");
+        Configuration.setDefault("leaderboards.max_leaderboard_size", 10, "The maximum size of the leaderboard");
     }
 
     @Override
